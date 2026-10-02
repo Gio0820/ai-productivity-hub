@@ -8,7 +8,6 @@ import {
   ClipboardList,
   Copy,
   FileText,
-  Globe2,
   Lightbulb,
   Link2,
   Menu,
@@ -18,22 +17,12 @@ import {
   WandSparkles,
   X,
 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 type ToolId = "meeting" | "planner" | "research";
-
-const greetings = [
-  { word: "Welcome", language: "English", className: "font-display font-extrabold" },
-  { word: "Bienvenue", language: "Français", className: "font-sans font-light" },
-  { word: "Bienvenido", language: "Español", className: "font-display font-black uppercase" },
-  { word: "Bem-vindo", language: "Português", className: "font-mono font-bold" },
-  { word: "Willkommen", language: "Deutsch", className: "font-sans font-semibold" },
-  { word: "Benvenuto", language: "Italiano", className: "font-display font-medium italic" },
-  { word: "ようこそ", language: "日本語", className: "font-sans font-bold" },
-] as const;
 
 const tools = {
   meeting: {
@@ -110,7 +99,6 @@ function RichOutput({ text }: { text: string }) {
 
 function Index() {
   const [showWelcome, setShowWelcome] = useState(true);
-  const [greetingIndex, setGreetingIndex] = useState(0);
   const [active, setActive] = useState<ToolId>("meeting");
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
@@ -122,15 +110,6 @@ function Index() {
   const [menuOpen, setMenuOpen] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
   const current = tools[active];
-  const greeting = greetings[greetingIndex] ?? greetings[0];
-
-  useEffect(() => {
-    if (!showWelcome) return;
-    const timer = window.setInterval(() => {
-      setGreetingIndex((index) => (index + 1) % greetings.length);
-    }, 1800);
-    return () => window.clearInterval(timer);
-  }, [showWelcome]);
 
   function selectTool(id: ToolId) {
     abortRef.current?.abort();
@@ -206,27 +185,15 @@ function Index() {
             </div>
           </div>
 
-          <section className="my-16 max-w-5xl" aria-live="polite">
+          <section className="my-16 max-w-5xl">
             <div className="mb-5 flex items-center gap-2 text-sm font-semibold text-primary">
-              <Globe2 className="size-4" />
-              A workspace for everyone
+              <Sparkle className="size-4" />
+              AI Workplace Productivity Assistant
             </div>
-            <div className="flex min-h-32 items-center overflow-hidden sm:min-h-44 lg:min-h-52">
-              <h1
-                key={greeting.word}
-                className={cn(
-                  "welcome-word max-w-full text-[clamp(3.25rem,10vw,8.5rem)] leading-none text-foreground",
-                  greeting.className,
-                )}
-                lang={greeting.language === "日本語" ? "ja" : undefined}
-              >
-                {greeting.word}
-              </h1>
-            </div>
-            <p key={`${greeting.language}-label`} className="welcome-language mt-3 text-sm font-semibold text-muted-foreground">
-              {greeting.language}
-            </p>
-            <p className="mt-6 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">
+            <h1 className="welcome-word font-display text-[clamp(3.25rem,10vw,8.5rem)] font-extrabold leading-none text-foreground">
+              Welcome
+            </h1>
+            <p className="welcome-sub mt-6 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">
               Summarize meetings, plan focused work, and turn research into useful insights—all in one guest workspace.
             </p>
           </section>
