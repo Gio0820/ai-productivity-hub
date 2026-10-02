@@ -10,3 +10,4 @@
 <!-- LOVABLE:END -->
 
 - Keep AI prompts and gateway credentials in TanStack server routes because guest-facing AI requests still require a secure server boundary.
+- Keep the multilingual welcome as an in-page entry state so the guest workspace and its tools remain on the canonical home route.
