@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Keep AI prompts and gateway credentials in TanStack server routes because guest-facing AI requests still require a secure server boundary.
