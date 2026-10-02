@@ -7,7 +7,8 @@ import { createRunIdFetch } from "@/lib/run-id.server";
 
 const requestSchema = z.object({
   tool: z.enum(["meeting", "planner", "research"]),
-  input: z.string().trim().min(20).max(30_000),
+  input: z.string().trim().max(30_000).default(""),
+  url: z.string().trim().url().max(2048).optional(),
   period: z.enum(["daily", "weekly"]).optional(),
 });
 

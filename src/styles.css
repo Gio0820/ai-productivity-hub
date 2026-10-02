@@ -71,7 +71,7 @@
   --disclaimer-border: oklch(0.88 0.08 75);
   --disclaimer-icon: oklch(0.57 0.14 60);
   --shadow-workspace: 0 18px 55px oklch(0.27 0.06 297 / 8%);
-  --rose-watermark: oklch(0.72 0.14 345 / 12%);
+  --rose-watermark: oklch(0.72 0.14 345 / 24%);
 }
 
 @layer base {
