@@ -71,7 +71,9 @@
   --disclaimer-border: oklch(0.88 0.08 75);
   --disclaimer-icon: oklch(0.57 0.14 60);
   --shadow-workspace: 0 18px 55px oklch(0.27 0.06 297 / 8%);
-  --rose-watermark: oklch(0.72 0.14 345 / 24%);
+  --rose-watermark: oklch(0.68 0.17 345 / 42%);
+  --rose-watermark-deep: oklch(0.58 0.19 350 / 50%);
+  --rose-leaf: oklch(0.62 0.11 165 / 30%);
 }
 
 @layer base {
@@ -82,11 +84,25 @@
     color: var(--foreground);
     background-color: var(--background);
     background-image:
-      radial-gradient(ellipse 13px 6px at 50% 34%, var(--rose-watermark) 0 38%, transparent 42%),
-      radial-gradient(ellipse 6px 13px at 66% 50%, var(--rose-watermark) 0 38%, transparent 42%),
-      radial-gradient(ellipse 13px 6px at 50% 66%, var(--rose-watermark) 0 38%, transparent 42%),
-      radial-gradient(ellipse 6px 13px at 34% 50%, var(--rose-watermark) 0 38%, transparent 42%);
-    background-size: 112px 112px;
+      /* main bloom: six petals around a deep centre */
+      radial-gradient(ellipse 9px 16px at 50% calc(50% - 11px), var(--rose-watermark) 0 46%, transparent 50%),
+      radial-gradient(ellipse 9px 16px at 50% calc(50% + 11px), var(--rose-watermark) 0 46%, transparent 50%),
+      radial-gradient(ellipse 16px 9px at calc(50% + 11px) 50%, var(--rose-watermark) 0 46%, transparent 50%),
+      radial-gradient(ellipse 16px 9px at calc(50% - 11px) 50%, var(--rose-watermark) 0 46%, transparent 50%),
+      radial-gradient(ellipse 12px 12px at calc(50% + 9px) calc(50% - 9px), var(--rose-watermark) 0 46%, transparent 50%),
+      radial-gradient(ellipse 12px 12px at calc(50% - 9px) calc(50% + 9px), var(--rose-watermark) 0 46%, transparent 50%),
+      radial-gradient(ellipse 12px 12px at calc(50% - 9px) calc(50% - 9px), var(--rose-watermark) 0 46%, transparent 50%),
+      radial-gradient(ellipse 12px 12px at calc(50% + 9px) calc(50% + 9px), var(--rose-watermark) 0 46%, transparent 50%),
+      radial-gradient(circle 7px at 50% 50%, var(--rose-watermark-deep) 0 55%, transparent 60%),
+      /* leaf pair under the bloom */
+      radial-gradient(ellipse 18px 8px at calc(50% + 15px) calc(50% + 27px), var(--rose-leaf) 0 46%, transparent 50%),
+      radial-gradient(ellipse 18px 8px at calc(50% - 15px) calc(50% + 27px), var(--rose-leaf) 0 46%, transparent 50%),
+      /* small buds scattered for a denser weave */
+      radial-gradient(circle 5px at 12% 14%, var(--rose-watermark) 0 52%, transparent 56%),
+      radial-gradient(circle 5px at 88% 86%, var(--rose-watermark) 0 52%, transparent 56%),
+      radial-gradient(circle 3px at 84% 18%, var(--rose-watermark-deep) 0 52%, transparent 56%),
+      radial-gradient(circle 3px at 16% 82%, var(--rose-watermark-deep) 0 52%, transparent 56%);
+    background-size: 132px 132px;
   }
   button, textarea { letter-spacing: 0; }
   ::selection { background: var(--primary-soft); color: var(--foreground); }
