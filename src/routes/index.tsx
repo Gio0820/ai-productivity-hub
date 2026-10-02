@@ -9,6 +9,7 @@ import {
   Copy,
   FileText,
   Lightbulb,
+  Link2,
   Menu,
   RotateCcw,
   Search,
@@ -52,9 +53,9 @@ const tools = {
     label: "Research Assistant",
     shortLabel: "Research",
     title: "AI Research Assistant",
-    description: "Distill a topic or article into useful insights, recommendations, and open questions.",
+    description: "Distill an article from a URL or pasted text into useful insights, recommendations, and open questions.",
     placeholder:
-      "Paste an article, report excerpt, or describe the topic you want to explore…",
+      "Paste an article URL above, or paste the article text or topic here…",
     action: "Analyze research",
     emptyTitle: "Your research brief will appear here",
     emptyText: "Provide source material or a detailed topic to receive grounded, actionable insights.",
@@ -104,6 +105,7 @@ function Index() {
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
   const [period, setPeriod] = useState<"daily" | "weekly">("daily");
+  const [sourceUrl, setSourceUrl] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
   const current = tools[active];
@@ -115,6 +117,7 @@ function Index() {
     setOutput("");
     setError("");
     setLoading(false);
+    setSourceUrl("");
     setMenuOpen(false);
   }
 
