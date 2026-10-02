@@ -122,8 +122,9 @@ function Index() {
   }
 
   async function generate() {
-    if (input.trim().length < 20 || loading) {
-      if (input.trim().length < 20) setError("Please add a little more detail before generating.");
+    const hasUrl = active === "research" && Boolean(sourceUrl.trim());
+    if (input.trim().length < 20 && !hasUrl) {
+      setError("Please add a little more detail, or paste an article URL first.");
       return;
     }
     setError("");
@@ -135,7 +136,12 @@ function Index() {
       const response = await fetch("/api/assistant", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tool: active, input, period }),
+        body: JSON.stringify({
+          tool: active,
+          input,
+          period,
+          ...(active === "research" && sourceUrl.trim() ? { url: sourceUrl.trim() } : {}),
+        }),
         signal: controller.signal,
       });
       if (!response.ok || !response.body) {
@@ -203,6 +209,19 @@ function Index() {
               <div className="mb-4 flex min-h-9 items-center justify-between gap-3"><div><p className="font-display text-sm font-bold">Your input</p><p className="text-xs text-muted-foreground">Be specific for a more useful result</p></div>
                 {active === "planner" && <div className="flex rounded-md bg-secondary p-1"><Button size="sm" variant="ghost" className={cn("h-7 px-3 text-xs", period === "daily" && "bg-card text-foreground shadow-sm")} onClick={() => setPeriod("daily")}>Daily</Button><Button size="sm" variant="ghost" className={cn("h-7 px-3 text-xs", period === "weekly" && "bg-card text-foreground shadow-sm")} onClick={() => setPeriod("weekly")}>Weekly</Button></div>}
               </div>
+              {active === "research" && (
+                <div className="relative mb-3">
+                  <Link2 className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                  <input
+                    value={sourceUrl}
+                    onChange={(event) => { setSourceUrl(event.target.value); setError(""); }}
+                    type="url"
+                    placeholder="Paste an article URL (optional)…"
+                    aria-label="Article URL"
+                    className="h-10 w-full rounded-md border border-input bg-input-surface pl-9 pr-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-ring/20"
+                  />
+                </div>
+              )}
               <div className="relative flex flex-1 flex-col">
                 <textarea value={input} onChange={(event) => { setInput(event.target.value); setError(""); }} maxLength={30000} placeholder={current.placeholder} className="min-h-80 flex-1 resize-none rounded-md border border-input bg-input-surface p-4 text-sm leading-6 outline-none transition focus:border-primary focus:ring-2 focus:ring-ring/20" />
                 <span className="absolute bottom-3 right-3 text-[11px] text-muted-foreground">{input.length.toLocaleString()} / 30,000</span>
