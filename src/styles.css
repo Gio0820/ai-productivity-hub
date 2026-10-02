@@ -108,6 +108,44 @@
   ::selection { background: var(--primary-soft); color: var(--foreground); }
 }
 
+@keyframes welcome-slide {
+  0% { opacity: 0; transform: translateX(3rem); }
+  18% { opacity: 1; transform: translateX(0); }
+  78% { opacity: 1; transform: translateX(0); }
+  100% { opacity: 0; transform: translateX(-3rem); }
+}
+
+@keyframes welcome-label {
+  from { opacity: 0; transform: translateY(0.5rem); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@layer components {
+  .welcome-screen {
+    background-color: color-mix(in oklch, var(--background) 76%, transparent);
+  }
+
+  .welcome-screen::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, var(--background) 0%, transparent 48%, var(--background) 100%);
+    opacity: 0.48;
+    pointer-events: none;
+  }
+
+  .welcome-word {
+    letter-spacing: 0;
+    overflow-wrap: anywhere;
+    animation: welcome-slide 1.8s ease-in-out both;
+  }
+
+  .welcome-language {
+    letter-spacing: 0;
+    animation: welcome-label 0.35s ease-out both;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
