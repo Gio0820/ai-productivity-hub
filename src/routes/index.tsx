@@ -122,7 +122,7 @@ function Index() {
   const [menuOpen, setMenuOpen] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
   const current = tools[active];
-  const greeting = greetings[greetingIndex];
+  const greeting = greetings[greetingIndex] ?? greetings[0];
 
   useEffect(() => {
     if (!showWelcome) return;
@@ -233,7 +233,7 @@ function Index() {
 
           <div className="flex flex-col gap-4 border-t border-border/80 pt-6 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm text-muted-foreground">No account required. Start working right away.</p>
-            <Button size="lg" className="w-full sm:w-auto" onClick={() => setShowWelcome(false)}>
+            <Button className="h-11 w-full px-6 sm:w-auto" onClick={() => setShowWelcome(false)}>
               Enter workspace
               <ArrowRight className="size-4" />
             </Button>
