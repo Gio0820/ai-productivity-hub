@@ -66,14 +66,9 @@ export const Route = createFileRoute("/api/assistant")({
           },
         });
 
-        const response = result.toTextStreamResponse({
+        return result.toTextStreamResponse({
           headers: { "Cache-Control": "no-cache, no-transform" },
         });
-        const runId = runIdFetch.getRunId();
-        if (!runId) return response;
-        const headers = new Headers(response.headers);
-        headers.set("X-Lovable-AIG-Run-ID", runId);
-        return new Response(response.body, { status: response.status, headers });
       },
     },
   },
