@@ -8,6 +8,7 @@ import {
   ClipboardList,
   Copy,
   FileText,
+  Globe2,
   Lightbulb,
   Link2,
   Menu,
@@ -17,12 +18,22 @@ import {
   WandSparkles,
   X,
 } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 type ToolId = "meeting" | "planner" | "research";
+
+const greetings = [
+  { word: "Welcome", language: "English", className: "font-display font-extrabold" },
+  { word: "Bienvenue", language: "Français", className: "font-sans font-light" },
+  { word: "Bienvenido", language: "Español", className: "font-display font-black uppercase" },
+  { word: "Bem-vindo", language: "Português", className: "font-mono font-bold" },
+  { word: "Willkommen", language: "Deutsch", className: "font-sans font-semibold" },
+  { word: "Benvenuto", language: "Italiano", className: "font-display font-medium italic" },
+  { word: "ようこそ", language: "日本語", className: "font-sans font-bold" },
+] as const;
 
 const tools = {
   meeting: {
@@ -98,6 +109,8 @@ function RichOutput({ text }: { text: string }) {
 }
 
 function Index() {
+  const [showWelcome, setShowWelcome] = useState(true);
+  const [greetingIndex, setGreetingIndex] = useState(0);
   const [active, setActive] = useState<ToolId>("meeting");
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
@@ -109,6 +122,15 @@ function Index() {
   const [menuOpen, setMenuOpen] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
   const current = tools[active];
+  const greeting = greetings[greetingIndex];
+
+  useEffect(() => {
+    if (!showWelcome) return;
+    const timer = window.setInterval(() => {
+      setGreetingIndex((index) => (index + 1) % greetings.length);
+    }, 1800);
+    return () => window.clearInterval(timer);
+  }, [showWelcome]);
 
   function selectTool(id: ToolId) {
     abortRef.current?.abort();
@@ -168,6 +190,57 @@ function Index() {
     await navigator.clipboard.writeText(output);
     setCopied(true);
     window.setTimeout(() => setCopied(false), 1800);
+  }
+
+  if (showWelcome) {
+    return (
+      <main className="welcome-screen relative grid min-h-screen overflow-hidden px-5 py-8 text-foreground sm:px-8">
+        <div className="relative z-10 flex w-full max-w-6xl flex-col justify-between justify-self-center">
+          <div className="flex items-center gap-3">
+            <div className="grid size-10 place-items-center rounded-md bg-primary text-primary-foreground shadow-workspace">
+              <Sparkle className="size-5" />
+            </div>
+            <div>
+              <p className="font-display text-sm font-extrabold">AI WORKPLACE</p>
+              <p className="text-xs text-muted-foreground">Productivity assistant</p>
+            </div>
+          </div>
+
+          <section className="my-16 max-w-5xl" aria-live="polite">
+            <div className="mb-5 flex items-center gap-2 text-sm font-semibold text-primary">
+              <Globe2 className="size-4" />
+              A workspace for everyone
+            </div>
+            <div className="flex min-h-32 items-center overflow-hidden sm:min-h-44 lg:min-h-52">
+              <h1
+                key={greeting.word}
+                className={cn(
+                  "welcome-word max-w-full text-[clamp(3.25rem,10vw,8.5rem)] leading-none text-foreground",
+                  greeting.className,
+                )}
+                lang={greeting.language === "日本語" ? "ja" : undefined}
+              >
+                {greeting.word}
+              </h1>
+            </div>
+            <p key={`${greeting.language}-label`} className="welcome-language mt-3 text-sm font-semibold text-muted-foreground">
+              {greeting.language}
+            </p>
+            <p className="mt-6 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">
+              Summarize meetings, plan focused work, and turn research into useful insights—all in one guest workspace.
+            </p>
+          </section>
+
+          <div className="flex flex-col gap-4 border-t border-border/80 pt-6 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm text-muted-foreground">No account required. Start working right away.</p>
+            <Button size="lg" className="w-full sm:w-auto" onClick={() => setShowWelcome(false)}>
+              Enter workspace
+              <ArrowRight className="size-4" />
+            </Button>
+          </div>
+        </div>
+      </main>
+    );
   }
 
   return (
